@@ -14,13 +14,15 @@ public class Main {
         var polygon = getPolygon(num);
         System.out.println("Enter target point: ");
         var target = getPoint();
-        if (polygon != null) {
+        if (polygon != null && polygon.isConvex()) {
             var contain = polygon.containsRayCast(target);
             System.out.println(">Using Ray Cast algorithm, target is in polygon?" + (contain ? YesNo.YES:YesNo.NO));
             contain = polygon.containsWindingNumber(target);
             System.out.println(">Using Winding number algorithm, target je u polygon?" + (contain ? YesNo.YES:YesNo.NO));
-            contain = polygon.getPolygon().contains(target.x, target.y);
+            contain = polygon.get_vertices().contains(target.x, target.y);
             System.out.println(">Using java.awt.Polygon class, target is in polygon?" + (contain ? YesNo.YES:YesNo.NO));
+        } else {
+            System.out.println(">Incorrect entry");
         }
     }
 
