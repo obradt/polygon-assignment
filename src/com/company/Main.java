@@ -12,16 +12,30 @@ public class Main {
 
         var num =numberOfPoints();
         var polygon = getPolygon(num);
-        System.out.println("Unesite target tacku: ");
+        System.out.println("Enter target point: ");
         var target = getPoint();
+
         if (polygon != null) {
-            var contain = polygon.contains(target);
-            System.out.println(contain ? "Tacka se nalazi u poligonu" : "Tacka se nalazi izvan poligona");
+            if (polygon.isTargetVertices(target)) {
+                System.out.println(">Target is on vertices");
+            }
+
+            else if (polygon.isConvex()) {
+                var contain = polygon.containsRayCast(target);
+                System.out.println(">Using Ray Cast algorithm, target is in polygon? " + (contain ? YesNo.YES:YesNo.NO));
+                contain = polygon.containsWindingNumber(target);
+                System.out.println(">Using Winding number algorithm, target je u polygon? " + (contain ? YesNo.YES:YesNo.NO));
+                contain = polygon.get_vertices().contains(target.x, target.y);
+                System.out.println(">Using java.awt.Polygon class, target is in polygon? "  + (contain ? YesNo.YES:YesNo.NO));
+            }
+
+        } else {
+            System.out.println(">Incorrect entry, not convex or not polygon");
         }
     }
 
     public static int numberOfPoints() {
-        System.out.println("Unesite broj tacaka:");
+        System.out.println("Enter number of points:");
         var input = scanner.nextLine();
         if (input == null || input.trim().isEmpty()) {
             return -1;
@@ -35,18 +49,18 @@ public class Main {
 
     public static Polygon getPolygon (int numberOfPoints) {
         if (numberOfPoints < 3) {
-            System.out.println("Poligon mora da sadrzi minimum 3 tacke");
+            System.out.println("Polygon must contain at least 3 points");
             return null;
         }
-        System.out.println("Unesite kordinate za tacke po x,y osi: ");
-        System.out.println("(Format treba da bude x,y i celi brojevi)");
+        System.out.println("Enter point coordinates by x, y axis: ");
+        System.out.println("(Format needs to be x,y and whole numbers)");
         var polygon = new Polygon();
 
         do {
 
             polygon.addPoint(getPoint());
         } while (polygon.getSizeOfPoints() < numberOfPoints);
-            System.out.println("Kordinate poligona su sledece: " + " " + polygon.readPolygon());
+            System.out.println("Coordinates of polygon: " + polygon.readPolygon());
 
             return polygon;
     }
@@ -58,14 +72,14 @@ public class Main {
         do {
             var input = scanner.nextLine();
             if (input == null || input.trim().isEmpty() || !input.contains(",")) {
-                System.out.println("Niste uneli pravilan format");
+                System.out.println("Not correct format");
                 continue;
             }
             Pattern pattern = Pattern.compile("\\d,\\d");
             Matcher matcher = pattern.matcher(input);
             boolean machFound = matcher.find();
             if (!machFound) {
-                System.out.println("Niste uneli pravilan format");
+                System.out.println("Not correct format");
                 continue;
             }
             var arrayOfNumbers = input.split(",");
@@ -75,10 +89,12 @@ public class Main {
             break;
 
         } while (true);
-            System.out.println("Tacka je: " + " " + point.toString());
+            System.out.println("Point: " + point.toString());
 
         return point;
     }
+
+
 
 
 }
