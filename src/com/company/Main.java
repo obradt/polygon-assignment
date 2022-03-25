@@ -14,15 +14,23 @@ public class Main {
         var polygon = getPolygon(num);
         System.out.println("Enter target point: ");
         var target = getPoint();
-        if (polygon != null && polygon.isConvex()) {
-            var contain = polygon.containsRayCast(target);
-            System.out.println(">Using Ray Cast algorithm, target is in polygon?" + (contain ? YesNo.YES:YesNo.NO));
-            contain = polygon.containsWindingNumber(target);
-            System.out.println(">Using Winding number algorithm, target je u polygon?" + (contain ? YesNo.YES:YesNo.NO));
-            contain = polygon.get_vertices().contains(target.x, target.y);
-            System.out.println(">Using java.awt.Polygon class, target is in polygon?" + (contain ? YesNo.YES:YesNo.NO));
+
+        if (polygon != null) {
+            if (polygon.isTargetVertices(target)) {
+                System.out.println(">Target is on vertices");
+            }
+
+            else if (polygon.isConvex()) {
+                var contain = polygon.containsRayCast(target);
+                System.out.println(">Using Ray Cast algorithm, target is in polygon? " + (contain ? YesNo.YES:YesNo.NO));
+                contain = polygon.containsWindingNumber(target);
+                System.out.println(">Using Winding number algorithm, target je u polygon? " + (contain ? YesNo.YES:YesNo.NO));
+                contain = polygon.get_vertices().contains(target.x, target.y);
+                System.out.println(">Using java.awt.Polygon class, target is in polygon? "  + (contain ? YesNo.YES:YesNo.NO));
+            }
+
         } else {
-            System.out.println(">Incorrect entry");
+            System.out.println(">Incorrect entry, not convex or not polygon");
         }
     }
 
@@ -52,7 +60,7 @@ public class Main {
 
             polygon.addPoint(getPoint());
         } while (polygon.getSizeOfPoints() < numberOfPoints);
-            System.out.println("Coordinates of polygon: " + " " + polygon.readPolygon());
+            System.out.println("Coordinates of polygon: " + polygon.readPolygon());
 
             return polygon;
     }
@@ -81,7 +89,7 @@ public class Main {
             break;
 
         } while (true);
-            System.out.println("Point: " + " " + point.toString());
+            System.out.println("Point: " + point.toString());
 
         return point;
     }

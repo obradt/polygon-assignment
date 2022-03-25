@@ -101,4 +101,13 @@ public class Polygon {
         return true;
     }
 
+    public boolean isTargetVertices(Point target) {
+        for (var point:_vertices) {
+            if (point.x == target.x && point.y == target.y){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
